@@ -5,6 +5,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "tags", uniqueConstraints = [UniqueConstraint(columnNames = ["TagName"])])
 class Tag: BaseModel<Long>() {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   override var id: Long? = null;

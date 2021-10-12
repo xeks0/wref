@@ -9,7 +9,7 @@ import ru.wref.repository.AccountRepository
 import javax.inject.Inject
 
 @Component
-class AccountComponent : DataComponent(){
+class AccountComponent : DataComponent<AccountDTO,Account>(){
 
   @Inject
   lateinit var accountRepository: AccountRepository;
@@ -19,7 +19,7 @@ class AccountComponent : DataComponent(){
   }
 
   fun createAccountFrom(accountDTO: AccountDTO): Account {
-    return createAccountFrom(prepareDtoFrom(accountDTO))
+    return createAccountFrom(prepareDtoFrom(accountDTO,Account::class.java) as Account)
   }
 
   /**

@@ -9,7 +9,7 @@ import ru.wref.repository.TagRepository
 import javax.inject.Inject
 
 @Component
-class TagComponent: DataComponent() {
+class TagComponent: DataComponent<TagDTO,Tag>() {
 
   @Inject
   lateinit var tagRepository: TagRepository;
@@ -20,7 +20,7 @@ class TagComponent: DataComponent() {
   }
 
   fun createTagFromDto(tagDTO: TagDTO): Tag {
-    return createTagFromModel(prepareDtoFrom(tagDTO))
+    return createTagFromModel(prepareDtoFrom(tagDTO,Tag::class.java) as Tag)
   }
 
   /**
