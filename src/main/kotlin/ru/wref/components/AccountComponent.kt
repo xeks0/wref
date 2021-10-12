@@ -26,7 +26,7 @@ class AccountComponent {
   }
 
   @Transactional
-  fun createAccountFromList(account: AccountsList): List<Account> {
+  fun createAccountsFromList(account: AccountsList): List<Account> {
     val accounts: MutableList<Account> = mutableListOf()
     for (account: AccountDTO in account.accountDTOList!!) {
       accounts.add(createAccountFromDto(account));

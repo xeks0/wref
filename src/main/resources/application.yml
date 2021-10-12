@@ -20,3 +20,5 @@ spring:
     locations: classpath:db/migration
     schemas: wref
     enabled: true
+server:
+  port: 8000

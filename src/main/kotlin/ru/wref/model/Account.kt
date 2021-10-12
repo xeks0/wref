@@ -1,18 +1,15 @@
 package ru.wref.model
 
-import lombok.Getter
-import lombok.Setter
 import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "accounts")
-class Account {
+@Table(name = "accounts", uniqueConstraints = [UniqueConstraint(columnNames = ["AccountId"])])
+class Account : BaseModel() {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   val id: Long? = null;
-
 
   var DisplayName: String? = null;
 
@@ -25,11 +22,11 @@ class Account {
   @Column(columnDefinition = "TEXT")
   var AboutMe: String? = null;
 
-  var Views: Integer? = null;
+  var Views: Int? = null;
 
-  var UpVotes: Integer? = null;
+  var UpVotes: Int? = null;
 
-  var DownVotes: Integer? = null;
+  var DownVotes: Int? = null;
 
-  var AccountId: Integer? = null;
+  var AccountId: Int? = null;
 }
