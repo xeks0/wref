@@ -22,6 +22,7 @@ class Account {
 
   var Location: String? = null;
 
+  @Column(columnDefinition = "TEXT")
   var AboutMe: String? = null;
 
   var Views: Integer? = null;

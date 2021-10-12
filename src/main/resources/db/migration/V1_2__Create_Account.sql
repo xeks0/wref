@@ -1,6 +1,6 @@
 CREATE TABLE accounts (
   id bigint(20) NOT NULL AUTO_INCREMENT,
-  about_me varchar(255) DEFAULT NULL,
+  about_me TEXT DEFAULT NULL,
   account_id int(11) DEFAULT NULL,
   display_name varchar(255) DEFAULT NULL,
   down_votes int(11) DEFAULT NULL,
@@ -10,4 +10,4 @@ CREATE TABLE accounts (
   views int(11) DEFAULT NULL,
   website_url varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

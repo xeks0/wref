@@ -1,24 +1,24 @@
-package ru.wref.repository
+package ru.wref.service
 
 import org.flywaydb.test.annotation.FlywayTest
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import ru.wref.model.Account
+import ru.wref.repository.AccountRepository
 import javax.inject.Inject
 
 @FlywayTest(locationsForMigrate = ["db/migration"])
 @SpringBootTest
-//@AutoConfigureEmbeddedDatabase
-class AccountRepositoryTest {
+class MigrationStackExchangeTest {
+
+  @Inject
+  lateinit var migrationStackExchange: MigrationStackExchange;
 
   @Inject
   lateinit var accountRepository: AccountRepository;
 
   @Test
   fun testCreateAccount() {
-    val account: Account = Account();
-    account.DisplayName = "New Name"
-    accountRepository.save(account)
+    migrationStackExchange.migrationMovie()
     assert(accountRepository.findAll().size > 0)
   }
 }
