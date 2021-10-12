@@ -5,11 +5,11 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "accounts", uniqueConstraints = [UniqueConstraint(columnNames = ["AccountId"])])
-class Account : BaseModel() {
+class Account : BaseModel<Long>() {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-  val id: Long? = null;
+  override var id: Long? = null;
 
   var DisplayName: String? = null;
 

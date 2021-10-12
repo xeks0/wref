@@ -9,27 +9,27 @@ import ru.wref.repository.AccountRepository
 import javax.inject.Inject
 
 @Component
-class AccountComponent {
+class AccountComponent : DataComponent(){
 
   @Inject
   lateinit var accountRepository: AccountRepository;
 
-  @Inject
-  lateinit var accountDataAndFilter: AccountDataAndFilter;
-
-  fun createAccountFromModel(account: Account): Account {
+  fun createAccountFrom(account: Account): Account {
     return accountRepository.save(account);
   }
 
-  fun createAccountFromDto(accountDTO: AccountDTO): Account {
-    return createAccountFromModel(accountDataAndFilter.prepareDtoFromAccount(accountDTO))
+  fun createAccountFrom(accountDTO: AccountDTO): Account {
+    return createAccountFrom(prepareDtoFrom(accountDTO))
   }
 
+  /**
+   * Create accounts from list of received data from xml
+   */
   @Transactional
   fun createAccountsFromList(account: AccountsList): List<Account> {
     val accounts: MutableList<Account> = mutableListOf()
     for (account: AccountDTO in account.accountDTOList!!) {
-      accounts.add(createAccountFromDto(account));
+      accounts.add(createAccountFrom(account));
     }
     return accounts;
   }

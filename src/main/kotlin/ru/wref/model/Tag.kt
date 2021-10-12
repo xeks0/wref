@@ -4,11 +4,10 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "tags", uniqueConstraints = [UniqueConstraint(columnNames = ["TagName"])])
-class Tag: BaseModel() {
+class Tag: BaseModel<Long>() {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-  val id: Long? = null;
+  override var id: Long? = null;
 
   var TagName: String? = null;
 
