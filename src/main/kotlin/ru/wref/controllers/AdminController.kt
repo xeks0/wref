@@ -2,14 +2,13 @@ package ru.wref.controllers
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import java.security.Principal
 
 @RestController
-class MainController {
+class AdminController {
 
-  @GetMapping("/")
-  fun index():String{
-    return "Hello";
+  @GetMapping( "/admin")
+  fun admin(principal: Principal): String{
+    return "Hello ${principal.name}";
   }
-
-
 }
