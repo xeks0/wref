@@ -1,12 +1,12 @@
 spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wref?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/wref_test?useUnicode=true&characterEncoding=utf8
     username: root
     password: mk12kmMK12KMmk12kmMK12KM
     jpa:
       hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-      hibernate.ddl-auto: update
+      hibernate.ddl-auto: validate
       generate-ddl: true
       show-sql: false
     servlet:
