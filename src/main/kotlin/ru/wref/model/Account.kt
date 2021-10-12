@@ -10,42 +10,25 @@ import javax.persistence.*
 class Account {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Getter
-  @Setter
+
   val id: Long? = null;
-  @Getter
-  @Setter
-  val DisplayName: String? = null;
 
-  @Getter
-  @Setter
-  val LastAccessDate: Date? = null;
 
-  @Getter
-  @Setter
-  val WebsiteUrl: String? = null;
+  var DisplayName: String? = null;
 
-  @Getter
-  @Setter
-  val Location: String? = null;
+  var LastAccessDate: Date? = null;
 
-  @Getter
-  @Setter
-  val AboutMe: String? = null;
+  var WebsiteUrl: String? = null;
 
-  @Getter
-  @Setter
-  val Views: Integer? = null;
+  var Location: String? = null;
 
-  @Getter
-  @Setter
-  val UpVotes: Integer? = null;
+  var AboutMe: String? = null;
 
-  @Getter
-  @Setter
-  val DownVotes: Integer? = null;
+  var Views: Integer? = null;
 
-  @Getter
-  @Setter
-  val AccountId: Integer? = null;
+  var UpVotes: Integer? = null;
+
+  var DownVotes: Integer? = null;
+
+  var AccountId: Integer? = null;
 }
