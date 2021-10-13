@@ -8,17 +8,18 @@ class Tag: BaseModel<Long>() {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "tag_id")
   override var id: Long? = null;
 
-  var TagName: String? = null;
+  var tagName: String? = null;
 
-  var ExcerptPostId: Long? = null;
+  var excerptPostId: Long? = null;
 
-  var WikiPostId: Long? = null;
+  var wikiPostId: Long? = null;
 
-  var IsModeratorOnly: Boolean? = false;
+  var isModeratorOnly: Boolean? = false;
 
-  var IsRequired: Boolean? = false;
+  var isRequired: Boolean? = false;
 
-  var Count: Int? = null;
+  var count: Int? = null;
 }

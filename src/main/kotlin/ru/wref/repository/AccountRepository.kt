@@ -8,6 +8,7 @@ import ru.wref.model.Account
 
 @Repository
 @Transactional
-interface AccountRepository: CrudRepository<Account, Long>, JpaQueryDslPredicateRepository<Account,Long>,PagingAndSortingRepository<Account, Long> {
+interface AccountRepository : CrudRepository<Account, Long>, JpaQueryDslPredicateRepository<Account, Long>, PagingAndSortingRepository<Account, Long> {
+  fun findOneById(valueAsLong: Long): Account?
 
 }

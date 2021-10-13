@@ -4,29 +4,30 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "accounts", uniqueConstraints = [UniqueConstraint(columnNames = ["AccountId"])])
+@Table(name = "accounts")
 class Account : BaseModel<Long>() {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "account_id")
   override var id: Long? = null;
 
-  var DisplayName: String? = null;
+  var displayName: String? = null;
 
-  var LastAccessDate: Date? = null;
+  var lastAccessDate: Date? = null;
 
-  var WebsiteUrl: String? = null;
+  var websiteUrl: String? = null;
 
-  var Location: String? = null;
+  var location: String? = null;
 
   @Column(columnDefinition = "TEXT")
-  var AboutMe: String? = null;
+  var aboutMe: String? = null;
 
-  var Views: Int? = null;
+  var views: Int? = null;
 
-  var UpVotes: Int? = null;
+  var upVotes: Int? = null;
 
-  var DownVotes: Int? = null;
+  var downVotes: Int? = null;
 
-  var AccountId: Int? = null;
+
 }

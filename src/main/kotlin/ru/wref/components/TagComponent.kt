@@ -11,10 +11,6 @@ import javax.inject.Inject
 @Component
 class TagComponent: DataComponent<TagDTO,Tag>() {
 
-  @Inject
-  lateinit var tagRepository: TagRepository;
-
-
   fun createTagFromModel(tag: Tag): Tag {
     return tagRepository.save(tag);
   }

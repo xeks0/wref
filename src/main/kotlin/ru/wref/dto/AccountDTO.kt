@@ -8,6 +8,9 @@ import javax.xml.bind.annotation.XmlAttribute
 @XmlAccessorType(XmlAccessType.PROPERTY)
 class AccountDTO {
 
+  @XmlAttribute(name = "Id")
+  var Id: String? = null;
+
   @XmlAttribute(name = "DisplayName")
   var DisplayName: String? = null;
 
@@ -32,6 +35,4 @@ class AccountDTO {
   @XmlAttribute(name = "DownVotes")
   var DownVotes: String? = null;
 
-  @XmlAttribute(name = "AccountId")
-  var AccountId: String? = null;
 }

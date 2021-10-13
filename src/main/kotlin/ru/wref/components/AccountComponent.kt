@@ -11,9 +11,6 @@ import javax.inject.Inject
 @Component
 class AccountComponent : DataComponent<AccountDTO,Account>(){
 
-  @Inject
-  lateinit var accountRepository: AccountRepository;
-
   fun createAccountFrom(account: Account): Account {
     return accountRepository.save(account);
   }

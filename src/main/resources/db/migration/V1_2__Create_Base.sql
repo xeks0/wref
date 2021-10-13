@@ -1,8 +1,7 @@
 CREATE TABLE accounts
 (
-    id               bigint(20) NOT NULL AUTO_INCREMENT,
+    account_id       bigint(20) NOT NULL AUTO_INCREMENT,
     about_me         text,
-    account_id       int(11)      DEFAULT NULL,
     display_name     varchar(255) DEFAULT NULL,
     down_votes       int(11)      DEFAULT NULL,
     last_access_date datetime     DEFAULT NULL,
@@ -14,15 +13,13 @@ CREATE TABLE accounts
     delete_at        bit(1)       DEFAULT NULL,
     enabled_at       bit(1)       DEFAULT NULL,
     updated_at       datetime     DEFAULT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY UKAccountAccountId (account_id)
+    PRIMARY KEY (account_id)
 ) ENGINE = MyISAM
-  AUTO_INCREMENT = 7337
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE tags
 (
-    id                bigint(20) NOT NULL AUTO_INCREMENT,
+    tag_id            bigint(20) NOT NULL AUTO_INCREMENT,
     count             int(11)      DEFAULT NULL,
     excerpt_post_id   bigint(20)   DEFAULT NULL,
     is_moderator_only bit(1)       DEFAULT NULL,
@@ -33,8 +30,45 @@ CREATE TABLE tags
     delete_at         bit(1)       DEFAULT NULL,
     enabled_at        bit(1)       DEFAULT NULL,
     updated_at        datetime     DEFAULT NULL,
-    PRIMARY KEY (id),
+    PRIMARY KEY (tag_id),
     UNIQUE KEY UKTagTagName (tag_name)
 ) ENGINE = MyISAM
-  AUTO_INCREMENT = 91
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE posts
+(
+    post_id             bigint(20) NOT NULL AUTO_INCREMENT,
+    created_at          datetime     DEFAULT NULL,
+    delete_at           bit(1)       DEFAULT NULL,
+    enabled_at          bit(1)       DEFAULT NULL,
+    updated_at          datetime     DEFAULT NULL,
+    answer_count        int(11)      DEFAULT NULL,
+    body                text,
+    comment_count       int(11)      DEFAULT NULL,
+    content_license     varchar(255) DEFAULT NULL,
+    creation_date       datetime     DEFAULT NULL,
+    last_activity_date  datetime     DEFAULT NULL,
+    last_edit_date      datetime     DEFAULT NULL,
+    post_type_id        int(11)      DEFAULT NULL,
+    score               int(11)      DEFAULT NULL,
+    title               varchar(255) DEFAULT NULL,
+    accepted_answer_id  bigint(20)   DEFAULT NULL,
+    last_editor_user_id bigint(20)   DEFAULT NULL,
+    owner_user_id       bigint(20)   DEFAULT NULL,
+    parent_id           bigint(20)   DEFAULT NULL,
+    PRIMARY KEY (post_id),
+    KEY FKPostAcceptAnswerId (accepted_answer_id),
+    KEY FKPostLastEditorUserId (last_editor_user_id),
+    KEY FKPostOwnerUserId (owner_user_id),
+    KEY FKPostParentId (parent_id)
+) ENGINE = MyISAM
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE posts_tags
+(
+    post_id bigint(20) NOT NULL,
+    tag_id  bigint(20) NOT NULL,
+    KEY FKPostTagTagId (tag_id),
+    KEY FKPostTagPostId (post_id)
+) ENGINE = MyISAM
   DEFAULT CHARSET = utf8;

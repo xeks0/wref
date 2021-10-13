@@ -17,7 +17,7 @@ class AccountRepositoryTest {
   @Test
   fun testCreateAccount() {
     val account: Account = Account();
-    account.DisplayName = "New Name"
+    account.displayName = "New Name"
     accountRepository.save(account)
     assert(accountRepository.findAll().size > 0)
   }
