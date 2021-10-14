@@ -5,12 +5,13 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import ru.wref.dto.PostDTO
 import ru.wref.dto.PostList
-import ru.wref.mapper.UserSerialisation
 import ru.wref.mapper.PostSerialisation
 import ru.wref.mapper.TagSerialisation
-import ru.wref.model.*
-import ru.wref.repository.PostRepository
-import javax.inject.Inject
+import ru.wref.mapper.UserSerialisation
+import ru.wref.model.Post
+import ru.wref.model.PostProxy
+import ru.wref.model.TagProxy
+import ru.wref.model.UserProxy
 
 @Component
 class PostComponent : DataComponent<PostDTO, Post>() {

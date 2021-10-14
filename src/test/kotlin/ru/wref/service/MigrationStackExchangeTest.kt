@@ -27,7 +27,7 @@ class MigrationStackExchangeTest {
 
   @Test
   @Transactional
-  fun testCreateAccount() {
+  fun testMigration() {
     migrationStackExchange.migrationMovie()
     assert(userRepository.findAll().size > 0)
     val post: Post? =postRepository.findByIdOrNull(3);
