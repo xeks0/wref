@@ -2,10 +2,12 @@ package ru.wref.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import ru.wref.components.AccountComponent
+import ru.wref.components.CommentComponent
+import ru.wref.components.UserComponent
 import ru.wref.components.PostComponent
 import ru.wref.components.TagComponent
-import ru.wref.dto.AccountsList
+import ru.wref.dto.CommentsList
+import ru.wref.dto.UsersList
 import ru.wref.dto.PostList
 import ru.wref.dto.TagList
 import javax.inject.Inject
@@ -15,7 +17,7 @@ import javax.xml.bind.JAXBContext
 class MigrationStackExchange {
 
   @Inject
-  lateinit var accountComponent: AccountComponent;
+  lateinit var userComponent: UserComponent;
 
   @Inject
   lateinit var tagComponent: TagComponent;
@@ -23,14 +25,23 @@ class MigrationStackExchange {
   @Inject
   lateinit var postComponent: PostComponent;
 
+  @Inject
+  lateinit var commentComponent : CommentComponent;
+
   @Transactional
   fun migrationMovie(): Boolean? {
-    return executeAccount() == true && executeTag() == true && executePost() == true;
+    return executeUser() == true && executeTag() == true && executePost() == true && executeComment();
   }
 
-  fun executeAccount():Boolean?{
-    val accounts: AccountsList = getResources(JAXBContext.newInstance(AccountsList::class.java),"data/Users.xml") as AccountsList
-    return accountComponent.createAccountsFromList(accounts).isNotEmpty();
+  private fun executeComment(): Boolean {
+    val comments: CommentsList = getResources(JAXBContext.newInstance(CommentsList::class.java),"data/Comments.xml") as CommentsList
+    return commentComponent.createCommentFromList(comments).isNotEmpty();
+
+  }
+
+  fun executeUser():Boolean?{
+    val users: UsersList = getResources(JAXBContext.newInstance(UsersList::class.java),"data/Users.xml") as UsersList
+    return userComponent.createUserFromList(users).isNotEmpty();
   }
 
   fun executeTag():Boolean?{

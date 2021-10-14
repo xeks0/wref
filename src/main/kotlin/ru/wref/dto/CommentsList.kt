@@ -5,9 +5,9 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 
-@XmlRootElement(name = "users")
+@XmlRootElement(name = "comments")
 @XmlAccessorType(XmlAccessType.FIELD)
-class AccountsList {
+class CommentsList {
   @XmlElement(name = "row")
-  val accountDTOList: List<AccountDTO>? = null
+  val commentDTOList: List<CommentDTO>? = null
 }

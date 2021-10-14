@@ -4,11 +4,11 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import ru.wref.model.Account
+import ru.wref.model.User
 
 @Repository
 @Transactional
-interface AccountRepository : CrudRepository<Account, Long>, JpaQueryDslPredicateRepository<Account, Long>, PagingAndSortingRepository<Account, Long> {
-  fun findOneById(valueAsLong: Long): Account?
+interface UserRepository : CrudRepository<User, Long>, JpaQueryDslPredicateRepository<User, Long>, PagingAndSortingRepository<User, Long> {
+  fun findOneById(valueAsLong: Long): User?
 
 }

@@ -1,15 +1,9 @@
 package ru.wref.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import ru.wref.dto.TagList
-import ru.wref.mapper.AccountSerialisation
-import ru.wref.mapper.PostSerialisation
-import ru.wref.mapper.TagSerialisation
+import lombok.Getter
+import lombok.Setter
 import java.util.*
 import javax.persistence.*
-import kotlin.jvm.Transient
 
 @Entity
 @Table(name = "posts")
@@ -60,10 +54,10 @@ class Post : BaseModel<Long>() {
 
   @ManyToOne
   @JoinColumn(name = "owner_user_id", nullable = true)
-  var ownerUser: Account? = null;
+  var ownerUser: User? = null;
 
   @Transient
-  var ownerUserId: AccountProxy? = null;
+  var ownerUserId: UserProxy? = null;
 
   var lastEditDate: Date? = null;
 
@@ -71,8 +65,11 @@ class Post : BaseModel<Long>() {
 
   @ManyToOne
   @JoinColumn(name = "last_editor_user_id", nullable = true)
-  var lastEditorUser: Account? = null;
+  var lastEditorUser: User? = null;
 
   @Transient
-  var lastEditorUserId: AccountProxy? = null;
+  var lastEditorUserId: UserProxy? = null;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+  val comments: List<Comment>? = null
 }

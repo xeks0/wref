@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute
 
 
 @XmlAccessorType(XmlAccessType.PROPERTY)
-class AccountDTO {
+class UserDTO {
 
   @XmlAttribute(name = "Id")
   var Id: String? = null;

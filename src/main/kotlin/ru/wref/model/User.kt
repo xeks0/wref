@@ -4,12 +4,12 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "accounts")
-class Account : BaseModel<Long>() {
+@Table(name = "users")
+class User : BaseModel<Long>() {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "account_id")
+  @Column(name = "user_id")
   override var id: Long? = null;
 
   var displayName: String? = null;

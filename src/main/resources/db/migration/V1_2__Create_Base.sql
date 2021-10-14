@@ -1,6 +1,6 @@
-CREATE TABLE accounts
+CREATE TABLE users
 (
-    account_id       bigint(20) NOT NULL AUTO_INCREMENT,
+    user_id          bigint(20) NOT NULL AUTO_INCREMENT,
     about_me         text,
     display_name     varchar(255) DEFAULT NULL,
     down_votes       int(11)      DEFAULT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE accounts
     delete_at        bit(1)       DEFAULT NULL,
     enabled_at       bit(1)       DEFAULT NULL,
     updated_at       datetime     DEFAULT NULL,
-    PRIMARY KEY (account_id)
+    PRIMARY KEY (user_id)
 ) ENGINE = MyISAM
   DEFAULT CHARSET = utf8;
 
@@ -72,3 +72,24 @@ CREATE TABLE posts_tags
     KEY FKPostTagPostId (post_id)
 ) ENGINE = MyISAM
   DEFAULT CHARSET = utf8;
+
+CREATE TABLE comments
+(
+    comment_id        bigint(20) NOT NULL AUTO_INCREMENT,
+    created_at        datetime     DEFAULT NULL,
+    delete_at         bit(1)       DEFAULT NULL,
+    enabled_at        bit(1)       DEFAULT NULL,
+    updated_at        datetime     DEFAULT NULL,
+    content_license   varchar(255) DEFAULT NULL,
+    creation_date     datetime     DEFAULT NULL,
+    score             int(11)      DEFAULT NULL,
+    text              text,
+    user_display_name varchar(255) DEFAULT NULL,
+    post_id           bigint(20)   DEFAULT NULL,
+    user_id           bigint(20)   DEFAULT NULL,
+    PRIMARY KEY (comment_id),
+    KEY FKCommentPostId (post_id),
+    KEY FKCommentUserId (user_id)
+) ENGINE = MyISAM
+  DEFAULT CHARSET = utf8;
+
