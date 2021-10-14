@@ -13,7 +13,7 @@ class Comment : BaseModel<Long>() {
   override var id: Long? = null;
 
   @ManyToOne
-  @JoinColumn(name = "post_id", nullable = true)
+  @JoinColumn(name = "post_id", nullable = false)
   var post: Post? = null;
 
   @Transient

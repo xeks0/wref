@@ -2,11 +2,8 @@ package ru.wref.components
 
 import com.fasterxml.jackson.databind.JsonDeserializer
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.module.SimpleDeserializers
 import com.fasterxml.jackson.databind.module.SimpleModule
 import org.springframework.stereotype.Component
-import ru.wref.mapper.TagSerialisation
-import ru.wref.model.Tag
 
 @Component
 class ModuleRegistration<T> {

@@ -31,6 +31,6 @@ class MigrationStackExchangeTest {
     migrationStackExchange.migrationMovie()
     assert(userRepository.findAll().size > 0)
     val post: Post? =postRepository.findByIdOrNull(3);
-    post?.comments?.let { assertEquals(it.size, post.commentCount) }
+    assertEquals(post?.comments?.size, post?.commentCount)
   }
 }
