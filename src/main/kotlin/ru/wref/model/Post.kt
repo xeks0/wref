@@ -1,10 +1,12 @@
 package ru.wref.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "posts")
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Post : BaseModel<Long>() {
 
   @Id

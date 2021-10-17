@@ -51,6 +51,10 @@ open class DataComponent<T, W> {
     val serialized = mapper.writeValueAsString(data);
     return mapper.readValue(serialized, javaType);
   }
-
+  fun prepareEntityToDto(data: W, clazz: Class<T>): Any? {
+    val javaType: JavaType? = mapper.typeFactory.constructType(clazz);
+    val serialized = mapper.writeValueAsString(data);
+    return mapper.readValue(serialized, javaType);
+  }
 
 }

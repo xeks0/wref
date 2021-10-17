@@ -1,9 +1,11 @@
 package ru.wref.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import javax.persistence.*
 
 @Entity
 @Table(name = "tags", uniqueConstraints = [UniqueConstraint(columnNames = ["TagName"])])
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Tag: BaseModel<Long>() {
 
   @Id

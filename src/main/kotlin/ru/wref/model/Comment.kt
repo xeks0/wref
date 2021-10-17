@@ -1,10 +1,13 @@
 package ru.wref.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "comments")
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Comment : BaseModel<Long>() {
 
   @Id
@@ -14,6 +17,7 @@ class Comment : BaseModel<Long>() {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "post_id", nullable = false)
+  @JsonIgnore
   var post: Post? = null;
 
   @Transient

@@ -1,5 +1,6 @@
 package ru.wref.components
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -55,5 +56,8 @@ class PostComponent : DataComponent<PostDTO, Post>() {
     return posts;
   }
 
+  fun getPostFromId(id: Long): Post? {
+    return postRepository.getOneById(3);
+  }
 
 }
