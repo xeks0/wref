@@ -2,10 +2,8 @@ package ru.wref.service
 
 import junit.framework.Assert.assertEquals
 import org.flywaydb.test.annotation.FlywayTest
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
 import ru.wref.model.Post
 import ru.wref.repository.PostRepository
@@ -26,11 +24,10 @@ class MigrationStackExchangeTest {
   lateinit var postRepository: PostRepository;
 
   @Test
-  @Transactional
   fun testMigration() {
     migrationStackExchange.migrationMovie()
     assert(userRepository.findAll().size > 0)
-    val post: Post? =postRepository.findByIdOrNull(3);
-    assertEquals(post?.comments?.size, post?.commentCount)
+    val post: Post? =postRepository.getOneById(3);
+    assertEquals(post?.comments?.size, 3)
   }
 }

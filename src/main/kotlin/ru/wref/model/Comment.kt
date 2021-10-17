@@ -12,7 +12,7 @@ class Comment : BaseModel<Long>() {
   @Column(name = "comment_id")
   override var id: Long? = null;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "post_id", nullable = false)
   var post: Post? = null;
 

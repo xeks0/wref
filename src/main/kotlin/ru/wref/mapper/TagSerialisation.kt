@@ -19,7 +19,7 @@ class TagSerialisation(var tagRepository: TagRepository) : JsonDeserializer<TagP
       .replace("<", " ")
       .replace(">", " ")
       .trim { it <= ' ' }.split(" ").toTypedArray()
-    val tags: MutableList<Tag> = ArrayList()
+    val tags: MutableSet<Tag> = mutableSetOf()
     for (tagString in tagsString) {
       if (tagString.length < 4) {
         continue

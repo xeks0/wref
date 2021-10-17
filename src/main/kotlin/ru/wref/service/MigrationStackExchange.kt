@@ -14,6 +14,7 @@ import javax.inject.Inject
 import javax.xml.bind.JAXBContext
 
 @Service
+@Transactional
 class MigrationStackExchange {
 
   @Inject
@@ -33,7 +34,7 @@ class MigrationStackExchange {
     return executeUser() == true && executeTag() == true && executePost() == true && executeComment();
   }
 
-  private fun executeComment(): Boolean {
+  fun executeComment(): Boolean {
     val comments: CommentsList = getResources(JAXBContext.newInstance(CommentsList::class.java),"data/Comments.xml") as CommentsList
     return commentComponent.createCommentFromList(comments).isNotEmpty();
 

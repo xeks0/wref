@@ -1,5 +1,5 @@
 package ru.wref.model
 
 class TagProxy {
-  var tags: List<Tag>? = null
+  var tags: Set<Tag>? = null
 }

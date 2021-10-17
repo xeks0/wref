@@ -1,7 +1,5 @@
 package ru.wref.model
 
-import lombok.Getter
-import lombok.Setter
 import java.util.*
 import javax.persistence.*
 
@@ -30,7 +28,7 @@ class Post : BaseModel<Long>() {
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "posts_tags", joinColumns = [JoinColumn(name = "post_id", referencedColumnName = "post_id")], inverseJoinColumns = [JoinColumn(name = "tag_id", referencedColumnName = "tag_id")])
-  var tagsList: List<Tag>? = null
+  var tagsList: Set<Tag>? = null
 
   @Transient
   var tags: TagProxy? = null
@@ -71,5 +69,5 @@ class Post : BaseModel<Long>() {
   var lastEditorUserId: UserProxy? = null;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
-  val comments: List<Comment>? = null
+  val comments: Set<Comment>? = null
 }
