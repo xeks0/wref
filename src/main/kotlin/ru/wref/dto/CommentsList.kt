@@ -9,5 +9,5 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 class CommentsList {
   @XmlElement(name = "row")
-  val commentDTOList: List<CommentDTO>? = null
+  var commentDTOList: List<CommentDTO> = mutableListOf()
 }

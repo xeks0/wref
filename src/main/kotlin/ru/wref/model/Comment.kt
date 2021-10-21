@@ -35,6 +35,9 @@ class Comment : BaseModel<Long>() {
   @Column(columnDefinition = "TEXT")
   var text: String? = null;
 
+  @Column(columnDefinition = "TEXT")
+  var textRu: String? = null;
+
   var userDisplayName: String? = null;
 
   var creationDate: Date? = null;

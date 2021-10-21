@@ -19,6 +19,6 @@ class AdminController {
 
   @GetMapping( "/admin/migration")
   fun adminMigration(principal: Principal): String? {
-    return migrationStackExchange.migrationMovie().toString();
+    return migrationStackExchange.migrationMovie("data_meta").toString();
   }
 }

@@ -30,29 +30,41 @@ class MigrationStackExchange {
   lateinit var commentComponent : CommentComponent;
 
   @Transactional
-  fun migrationMovie(): Boolean? {
-    return executeUser() == true && executeTag() == true && executePost() == true && executeComment();
+  fun migrationMovie(path:String): Boolean? {
+    return executeUser(getUsers(path)) == true && executeTag(getTags(path)) == true && executePost(getPosts(path)) == true && executeComment(getComments(path));
   }
 
-  fun executeComment(): Boolean {
-    val comments: CommentsList = getResources(JAXBContext.newInstance(CommentsList::class.java),"data/Comments.xml") as CommentsList
+  fun getComments(path: String):CommentsList{
+    return getResources(JAXBContext.newInstance(CommentsList::class.java),"$path/Comments.xml") as CommentsList
+  }
+
+  fun executeComment(comments: CommentsList): Boolean {
     return commentComponent.createCommentFromList(comments).isNotEmpty();
 
   }
 
-  fun executeUser():Boolean?{
-    val users: UsersList = getResources(JAXBContext.newInstance(UsersList::class.java),"data/Users.xml") as UsersList
+  fun getUsers(path: String):UsersList{
+   return getResources(JAXBContext.newInstance(UsersList::class.java),"$path/Users.xml") as UsersList
+  }
+
+  fun executeUser(users: UsersList):Boolean?{
     return userComponent.createUserFromList(users).isNotEmpty();
   }
 
-  fun executeTag():Boolean?{
-    val tagList: TagList = getResources(JAXBContext.newInstance(TagList::class.java),"data/Tags.xml") as TagList
+  fun getTags(path: String):TagList{
+    return  getResources(JAXBContext.newInstance(TagList::class.java), "$path/Tags.xml") as TagList
+  }
+
+  fun executeTag(tagList: TagList):Boolean?{
     return tagComponent.createTagsFromList(tagList).isNotEmpty();
   }
 
-  fun executePost():Boolean?{
-    val tagList: PostList = getResources(JAXBContext.newInstance(PostList::class.java),"data/Posts.xml") as PostList
-    return postComponent.createPostsFromList(tagList).isNotEmpty();
+  fun getPosts(path: String):PostList{
+    return getResources(JAXBContext.newInstance(PostList::class.java),"$path/Posts.xml") as PostList
+  }
+
+  fun executePost(postList: PostList ):Boolean?{
+    return postComponent.createPostsFromList(postList).isNotEmpty();
   }
 
   private fun getResources(jaxbContext : JAXBContext, file: String): Any? {

@@ -60,4 +60,9 @@ class PostComponent : DataComponent<PostDTO, Post>() {
     return postRepository.getOneById(3);
   }
 
+  fun findLastPost(): Post? {
+    return postRepository.findTopByOrderByIdDesc()
+
+  }
+
 }

@@ -13,5 +13,6 @@ interface PostRepository : CrudRepository<Post, Long>, JpaQueryDslPredicateRepos
 
   @EntityGraph(attributePaths = ["comments","tagsList"])
   fun getOneById(longValue: Long): Post?
+  fun findTopByOrderByIdDesc(): Post?
 
 }

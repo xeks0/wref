@@ -5,11 +5,11 @@ import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
 
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 class PostDTO  {
 
   @XmlAttribute(name = "Id")
-  var Id: String? = null;
+  var id: String? = null;
 
   @XmlAttribute(name = "ParentId")
   @JsonIgnore

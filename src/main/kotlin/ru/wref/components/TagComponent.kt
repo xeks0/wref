@@ -1,11 +1,13 @@
 package ru.wref.components
 
 import org.hibernate.exception.ConstraintViolationException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import ru.wref.dto.TagDTO
 import ru.wref.dto.TagList
 import ru.wref.model.Tag
+import ru.wref.model.User
 
 @Component
 class TagComponent: DataComponent<TagDTO,Tag>() {
@@ -13,7 +15,7 @@ class TagComponent: DataComponent<TagDTO,Tag>() {
   fun createTagFromModel(tag: Tag): Tag? {
     try {
       return tagRepository.save(tag);
-    }catch (ignore: ConstraintViolationException){
+    }catch (ignore: DataIntegrityViolationException){
       return null;
     }
   }
@@ -32,6 +34,11 @@ class TagComponent: DataComponent<TagDTO,Tag>() {
       createTagFromDto(tag)?.let { tags.add(it) };
     }
     return tags;
+  }
+
+  fun findLastTag(): Tag? {
+    return tagRepository.findTopByOrderByIdDesc()
+
   }
 
 

@@ -9,5 +9,5 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 class TagList {
   @XmlElement(name = "row")
-  val tagDTOList: List<TagDTO>? = null
+  var tagDTOList: List<TagDTO> = mutableListOf()
 }

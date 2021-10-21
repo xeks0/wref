@@ -1,5 +1,6 @@
 package ru.wref.components
 
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import ru.wref.dto.UserDTO
@@ -10,7 +11,7 @@ import ru.wref.model.User
 class UserComponent : DataComponent<UserDTO,User>(){
 
   fun createAccountFrom(user: User): User {
-    return userRepository.save(user);
+      return userRepository.save(user);
   }
 
   fun createAccountFrom(userDTO: UserDTO): User {
@@ -27,6 +28,10 @@ class UserComponent : DataComponent<UserDTO,User>(){
       users.add(createAccountFrom(user));
     }
     return users;
+  }
+
+  fun findLastUser(): User? {
+    return userRepository.findTopByOrderByIdDesc()
   }
 
 

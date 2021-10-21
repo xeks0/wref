@@ -39,4 +39,8 @@ class CommentComponent : DataComponent<CommentDTO, Comment>() {
     }
     return comments;
   }
+
+  fun findLastComment(): Comment? {
+   return commentRepository.findTopByOrderByIdDesc();
+  }
 }

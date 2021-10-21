@@ -93,7 +93,13 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
+    <dependency>
+      <groupId>com.codeborne</groupId>
+      <artifactId>selenide</artifactId>
+      <version>5.14.2</version>
+    </dependency>
+
+    <dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
@@ -120,6 +126,7 @@
       <version>5.2.4</version>
       <scope>test</scope>
     </dependency>
+
 	</dependencies>
 
 	<build>

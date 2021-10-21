@@ -9,5 +9,5 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 class PostList {
   @XmlElement(name = "row")
-  val postDTOList: List<PostDTO>? = null
+  var postDTOList: List<PostDTO> = mutableListOf()
 }

@@ -11,4 +11,9 @@ import ru.wref.model.User
 interface UserRepository : CrudRepository<User, Long>, JpaQueryDslPredicateRepository<User, Long>, PagingAndSortingRepository<User, Long> {
   fun findOneById(valueAsLong: Long): User?
 
+  /**
+   * There is function to get the last record.
+   */
+  fun findTopByOrderByIdDesc(): User?
+
 }

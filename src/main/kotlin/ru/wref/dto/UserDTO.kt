@@ -3,13 +3,14 @@ package ru.wref.dto
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
+import javax.xml.bind.annotation.XmlElement
 
 
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 class UserDTO {
 
   @XmlAttribute(name = "Id")
-  var Id: String? = null;
+  var id: String? = null;
 
   @XmlAttribute(name = "DisplayName")
   var DisplayName: String? = null;

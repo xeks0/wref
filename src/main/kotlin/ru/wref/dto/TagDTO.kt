@@ -3,9 +3,11 @@ package ru.wref.dto
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
-
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 class TagDTO {
+
+  @XmlAttribute(name = "Id")
+  var id: String? = null;
 
   @XmlAttribute(name = "TagName")
   var TagName: String? = null;

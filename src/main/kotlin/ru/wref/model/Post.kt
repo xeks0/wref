@@ -10,7 +10,6 @@ import javax.persistence.*
 class Post : BaseModel<Long>() {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "post_id")
   override var id: Long? = null;
 
@@ -49,8 +48,13 @@ class Post : BaseModel<Long>() {
 
   var title: String? = null;
 
+  var titleRu: String? = null;
+
   @Column(columnDefinition = "TEXT")
   var body: String? = null;
+
+  @Column(columnDefinition = "TEXT")
+  var bodyRu: String? = null;
 
   @ManyToOne
   @JoinColumn(name = "owner_user_id", nullable = true)
