@@ -57,7 +57,7 @@ class PostComponent : DataComponent<PostDTO, Post>() {
   }
 
   fun getPostFromId(id: Long): Post? {
-    return postRepository.getOneById(3);
+    return postRepository.getOneById(id);
   }
 
   fun findLastPost(): Post? {

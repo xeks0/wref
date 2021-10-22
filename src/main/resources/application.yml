@@ -22,3 +22,6 @@ spring:
     enabled: true
 server:
   port: 8000
+timing:
+  updateData: 1000
+  initialDelay: 1

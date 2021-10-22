@@ -13,9 +13,9 @@ open class SchedulingDataXmlImport {
   @Inject
   lateinit var migrationProductionDataXML: MigrationProductionDataXML;
 
-  @Scheduled(fixedDelay = 1000)
+  @Scheduled(fixedRateString = "\${timing.updateData}", initialDelayString = "\${timing.initialDelay}")
   open fun importDataXMLTask(){
     println("SchedulingDataXmlImport.importDataXMLTask")
-    migrationProductionDataXML.exportData("data",1000)
+    migrationProductionDataXML.exportData("data_meta",1000)
   }
 }

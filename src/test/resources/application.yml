@@ -20,3 +20,6 @@ spring:
     locations: classpath:db/migration
     schemas: wref_test
     enabled: true
+timing:
+  updateData: 60000
+  initialDelay: 10000000000

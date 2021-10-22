@@ -4,6 +4,7 @@ import junit.framework.Assert.assertEquals
 import org.flywaydb.test.annotation.FlywayTest
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.TestPropertySource
 import ru.wref.model.Post
 import ru.wref.repository.PostRepository
 import ru.wref.repository.UserRepository
@@ -28,7 +29,7 @@ class MigrationStackExchangeTest {
   @Test
   fun migrationSediling(){
     for (i in 1..10){
-      migrationProductionDataXML.exportData("data_meta",3000);
+      migrationProductionDataXML.exportData("data_meta",5000);
     }
   }
   /**
@@ -54,7 +55,7 @@ class MigrationStackExchangeTest {
     println("Total caracters in test : " + character +" symbols" )
 
 
-    if(true){
+    if(false){
       val startTime = translateTest(posts)
       val endTime = System.nanoTime()
       println("Total execution Translate time: " + (endTime - startTime) / 1000000 + "ms" )

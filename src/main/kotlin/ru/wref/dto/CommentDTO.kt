@@ -8,12 +8,11 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
 import kotlin.jvm.Transient
 
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 class CommentDTO {
 
   @XmlAttribute(name = "Id")
-  var Id: String? = null;
-
+  var id: String? = null;
 
   @XmlAttribute(name = "PostId")
   var PostId: String? = null;

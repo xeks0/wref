@@ -11,7 +11,6 @@ import javax.persistence.*
 class Comment : BaseModel<Long>() {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "comment_id")
   override var id: Long? = null;
 

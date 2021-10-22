@@ -1,6 +1,7 @@
 package ru.wref.service
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.wref.components.CommentComponent
 import ru.wref.components.PostComponent
 import ru.wref.components.TagComponent
@@ -30,6 +31,7 @@ open class MigrationProductionDataXML {
   @Inject
   lateinit var commentComponent: CommentComponent;
 
+  @Transactional
   fun exportData(path: String, maxInTry: Int) {
     if (exportUser(path, maxInTry) != -1) {
       return;
@@ -160,7 +162,7 @@ open class MigrationProductionDataXML {
 
   private fun getLatIndexComment(usersList: CommentsList, lastUser: Comment): Int {
     for (userDTO: CommentDTO in usersList.commentDTOList) {
-      if (userDTO.Id?.toLong() ?: 0 == lastUser.id) {
+      if (userDTO.id?.equals(lastUser.id.toString()) == true) {
         return usersList.commentDTOList.indexOf(userDTO)
       }
     }
