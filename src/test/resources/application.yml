@@ -22,4 +22,5 @@ spring:
     enabled: true
 timing:
   updateData: 60000
+  updateDataTranslate: 60000
   initialDelay: 10000000000

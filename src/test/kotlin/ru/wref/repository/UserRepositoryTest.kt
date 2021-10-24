@@ -17,6 +17,7 @@ class UserRepositoryTest {
   @Test
   fun testCreateAccount() {
     val user: User = User();
+    user.id = 1;
     user.displayName = "New Name"
     userRepository.save(user)
     assert(userRepository.findAll().size > 0)

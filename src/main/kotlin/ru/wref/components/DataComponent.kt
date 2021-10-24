@@ -3,17 +3,16 @@ package ru.wref.components
 
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import ru.wref.model.CommentProxy
-import ru.wref.model.PostProxy
-import ru.wref.model.TagProxy
-import ru.wref.model.UserProxy
+import org.springframework.stereotype.Component
+import ru.wref.model.*
 import ru.wref.repository.CommentRepository
 import ru.wref.repository.PostRepository
 import ru.wref.repository.UserRepository
 import ru.wref.repository.TagRepository
 import javax.inject.Inject
 
-open class DataComponent<T, W> {
+@Component
+class DataComponent<T, W> {
 
   protected var mapper = jacksonObjectMapper()
 
@@ -55,6 +54,10 @@ open class DataComponent<T, W> {
     val javaType: JavaType? = mapper.typeFactory.constructType(clazz);
     val serialized = mapper.writeValueAsString(data);
     return mapper.readValue(serialized, javaType);
+  }
+
+  fun getLastCommentTranslate(): Comment? {
+    return commentRepository.findTopByOrderByIsTranslateAsc()
   }
 
 }

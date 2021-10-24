@@ -15,5 +15,7 @@ interface UserRepository : CrudRepository<User, Long>, JpaQueryDslPredicateRepos
    * There is function to get the last record.
    */
   fun findTopByOrderByIdDesc(): User?
+  fun findTopByOrderByIsTranslateAsc(): User?
+  fun getOneById(id: Long): User?
 
 }

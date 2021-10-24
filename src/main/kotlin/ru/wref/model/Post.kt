@@ -56,6 +56,11 @@ class Post : BaseModel<Long>() {
   @Column(columnDefinition = "TEXT")
   var bodyRu: String? = null;
 
+  var slug: String? = null;
+
+  @Column(name = "is_translate")
+  var isTranslate: Int = 0;
+
   @ManyToOne
   @JoinColumn(name = "owner_user_id", nullable = true)
   var ownerUser: User? = null;

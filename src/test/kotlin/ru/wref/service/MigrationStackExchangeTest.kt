@@ -54,37 +54,13 @@ class MigrationStackExchangeTest {
     }
     println("Total caracters in test : " + character +" symbols" )
 
-
-    if(false){
-      val startTime = translateTest(posts)
-      val endTime = System.nanoTime()
-      println("Total execution Translate time: " + (endTime - startTime) / 1000000 + "ms" )
+    for (i in 1..50) {
+      migrationProductionDataXML.translate(10)
     }
+
     println("Ok" )
   }
 
-  private fun translateTest(posts: List<Post>): Long {
-    val startTime = System.nanoTime()
 
-    var postsArray1: List<Post> = posts.subList(0, 25);
-    var postsArray2: List<Post> = posts.subList(25, 50);
-    var postsArray3: List<Post> = posts.subList(50, 75);
-    var postsArray4: List<Post> = posts.subList(75, posts.size);
-
-    var t1: Thread = Thread(GoogleTranslate("en", "ru", postsArray1))
-    t1.start();
-    var t2: Thread = Thread(GoogleTranslate("en", "ru", postsArray2))
-    t2.start();
-    var t3: Thread = Thread(GoogleTranslate("en", "ru", postsArray3))
-    t3.start();
-    var t4: Thread = Thread(GoogleTranslate("en", "ru", postsArray4))
-    t4.start();
-
-    t1.join()
-    t2.join()
-    t3.join()
-    t4.join()
-    return startTime
-  }
 }
 

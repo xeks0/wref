@@ -1,5 +1,6 @@
 package ru.wref.service
 
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.wref.components.CommentComponent
@@ -232,5 +233,157 @@ open class MigrationProductionDataXML {
     }
     return usersList.tagDTOList.subList(start, lastUser)
   }
+
+
+  fun translate(i: Int) {
+    try {
+      val postTranslate =  getLastPostTranslate()
+      if(postTranslate == -1L){
+        translatePost(0,i)
+      }
+      if(postTranslate >0){
+        translatePost(postTranslate ,i)
+      }
+    }catch (e:Exception){
+      e.printStackTrace()
+    }
+    try {
+      val сommentTranslate =  getLastCommentsTranslate()
+      if(сommentTranslate == -1L){
+        translateComment(0,i)
+      }
+      if(сommentTranslate >0){
+        translateComment(сommentTranslate ,i)
+      }
+    }catch (e:Exception){
+      e.printStackTrace()
+    }
+    try {
+      val userTranslate =  getLastUserTranslate()
+      if(userTranslate == -1L){
+        translateUser(0,i)
+      }
+      if(userTranslate >0){
+        translateUser(userTranslate ,i)
+      }
+    }catch (e:Exception){
+      e.printStackTrace()
+    }
+  }
+
+  private fun translatePost(start: Long, end: Int) {
+    var postStart: Post? = postComponent.getPostFromId(start)
+    if(postStart != null){
+      var posts: Page<Post> = postComponent.getPostFeromStartAndLimit(postStart,end)
+
+      var translate: MutableList<Post> = mutableListOf();
+      if(postStart.isTranslate == 0){
+        translate.add(postStart)
+      }
+      for (post:Post in posts){
+        if(postStart.isTranslate == 0){
+          translate.add(post)
+        }
+      }
+    var t1 = Thread(GoogleTranslatePost("en", "ru", translate))
+    t1.start();
+    t1.join()
+
+      for (post:Post in translate){
+        postComponent.createPostForce(post);
+      }
+    }
+
+  }
+  private fun translateUser(start: Long, end: Int) {
+    var userStart: User? = userComponent.getUserFromId(start)
+    if(userStart != null){
+      var posts: Page<User> = userComponent.getPostFromStartAndLimit(userStart,end)
+
+      var translate: MutableList<User> = mutableListOf();
+      if(userStart.isTranslate == 0){
+        translate.add(userStart)
+      }
+      for (user:User in posts){
+        if(userStart.isTranslate == 0){
+          translate.add(user)
+        }
+      }
+      var t1 = Thread(GoogleTranslateUser("en", "ru", translate))
+      t1.start();
+      t1.join()
+      for (post:User in translate){
+        userComponent.createUserForce(post);
+      }
+    }
+
+  }
+  private fun translateComment(start: Long, end: Int) {
+    var commentStart: Comment? = commentComponent.getCommentFromId(start)
+    if(commentStart != null){
+      var posts: Page<Comment> = commentComponent.getPostFromStartAndLimit(commentStart,end)
+
+      var translate: MutableList<Comment> = mutableListOf();
+      if(commentStart.isTranslate == 0){
+        translate.add(commentStart)
+      }
+      for (comment:Comment in posts){
+        if(commentStart.isTranslate == 0){
+          translate.add(comment)
+        }
+      }
+      var t1 = Thread(GoogleTranslateComment("en", "ru", translate))
+      t1.start();
+      t1.join()
+      for (post:Comment in translate){
+        commentComponent.createPostForce(post);
+      }
+    }
+
+  }
+
+  private fun getLastPostTranslate(): Long {
+    var post: Post? = postComponent.getLastPostTranslate()
+    if (post != null) {
+      val post1: Post? = postComponent.findLastPost();
+      if (post1 != null) {
+        if (post1.id == post.id) {
+          return 0;
+        }
+      }
+      return post.id!!;
+    }
+    return -1;
+
+  }
+  private fun getLastUserTranslate(): Long {
+    var user: User? = userComponent.getLastUserTranslate()
+    if (user != null) {
+      val user1: User? = userComponent.findLastUser();
+      if (user1 != null) {
+        if (user1.id == user.id) {
+          return 0;
+        }
+      }
+      return user.id!!;
+    }
+    return -1;
+
+  }
+  private fun getLastCommentsTranslate(): Long {
+    var comment: Comment? = commentComponent.getLastCommentTranslate()
+    if (comment != null) {
+      val comment1: Comment? = commentComponent.findLastComment();
+      if (comment1 != null) {
+        if (comment1.id == comment.id) {
+          return 0;
+        }
+      }
+      return comment.id!!;
+    }
+    return -1;
+
+  }
+
 
 }

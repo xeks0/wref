@@ -42,4 +42,8 @@ class Comment : BaseModel<Long>() {
   var creationDate: Date? = null;
 
   var contentLicense: String? = null;
+
+  @Column(name = "is_translate")
+  var isTranslate: Int = 0;
+
 }

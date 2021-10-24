@@ -16,6 +16,14 @@ open class SchedulingDataXmlImport {
   @Scheduled(fixedRateString = "\${timing.updateData}", initialDelayString = "\${timing.initialDelay}")
   open fun importDataXMLTask(){
     println("SchedulingDataXmlImport.importDataXMLTask")
-    migrationProductionDataXML.exportData("data_meta",1000)
+    migrationProductionDataXML.exportData("data",2000)
+  }
+
+
+
+  @Scheduled(fixedRateString = "\${timing.updateDataTranslate}", initialDelayString = "\${timing.initialDelay}")
+  open fun translateData(){
+    println("SchedulingDataXmlImport.translateData")
+      
   }
 }

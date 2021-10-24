@@ -24,4 +24,5 @@ server:
   port: 8000
 timing:
   updateData: 1000
+  updateDataTranslate: 60000000000000
   initialDelay: 1

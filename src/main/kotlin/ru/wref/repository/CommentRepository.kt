@@ -11,5 +11,7 @@ import ru.wref.model.Comment
 interface CommentRepository : CrudRepository<Comment, Long>, JpaQueryDslPredicateRepository<Comment, Long>, PagingAndSortingRepository<Comment, Long> {
   fun findOneById(longValue: Long): Comment?
   fun findTopByOrderByIdDesc(): Comment?
+  fun findTopByOrderByIsTranslateAsc(): Comment?
+  fun getOneById(id: Long): Comment?
 
 }

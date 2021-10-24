@@ -22,11 +22,17 @@ class User : BaseModel<Long>() {
   @Column(columnDefinition = "TEXT")
   var aboutMe: String? = null;
 
+  @Column(name = "about_me_ru",columnDefinition = "TEXT")
+  var aboutMeRu: String? = null;
+
   var views: Int? = null;
 
   var upVotes: Int? = null;
 
   var downVotes: Int? = null;
+
+  @Column(name = "is_translate")
+  var isTranslate: Int = 0;
 
 
 }

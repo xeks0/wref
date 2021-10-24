@@ -1,9 +1,12 @@
 package ru.wref.components
 
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import ru.wref.components.utils.OffsetBasedPageRequest
 import ru.wref.dto.PostDTO
 import ru.wref.dto.PostList
 import ru.wref.mapper.PostSerialisation
@@ -13,6 +16,7 @@ import ru.wref.model.Post
 import ru.wref.model.PostProxy
 import ru.wref.model.TagProxy
 import ru.wref.model.UserProxy
+
 
 @Component
 class PostComponent : DataComponent<PostDTO, Post>() {
@@ -24,7 +28,12 @@ class PostComponent : DataComponent<PostDTO, Post>() {
     posts.tagsList = posts.tags?.tags
     posts.ownerUser = posts.ownerUserId?.user;
     posts.lastEditorUser = posts.lastEditorUserId?.user;
+    posts.slug = (posts.title?.trim()?.replace(" ", "_")?.lowercase() ?: "") + posts.id.toString()
+    posts.isTranslate = 0;
     return posts;
+  }
+  fun createPostForce(post: Post): Post {
+    return postRepository.save(post);
   }
 
   fun createPostFromModel(post: Post): Post {
@@ -63,6 +72,31 @@ class PostComponent : DataComponent<PostDTO, Post>() {
   fun findLastPost(): Post? {
     return postRepository.findTopByOrderByIdDesc()
 
+  }
+
+  fun getPostFromUserAndDateBefore(post: Post): Post? {
+    var posts: List<Post> = postRepository.findByOwnerUserAndCreationDateLessThan(post.ownerUser, post.creationDate)
+    if (posts.isNotEmpty()) {
+      return posts[0]
+    }
+    return null
+  }
+
+  fun getPostFromUserAndDateAfter(post: Post): Post? {
+    var posts: List<Post> = postRepository.findByOwnerUserAndCreationDateGreaterThan(post.ownerUser, post.creationDate)
+    if (posts.isNotEmpty()) {
+      return posts[0]
+    }
+    return null
+  }
+
+  fun getLastPostTranslate(): Post? {
+   return postRepository.findTopByOrderByIsTranslateAsc()
+  }
+
+  fun getPostFeromStartAndLimit(start:Post, end: Int): Page<Post> {
+    val pageable: Pageable = OffsetBasedPageRequest(start.id!!.toInt(), end)
+    return postRepository.findAll(pageable)
   }
 
 }

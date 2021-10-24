@@ -1,8 +1,11 @@
 package ru.wref.components
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import ru.wref.components.utils.OffsetBasedPageRequest
 import ru.wref.dto.CommentDTO
 import ru.wref.dto.CommentsList
 import ru.wref.mapper.PostSerialisation
@@ -23,7 +26,9 @@ class CommentComponent : DataComponent<CommentDTO, Comment>() {
   fun createCommentFromModel(comment: Comment): Comment {
     return commentRepository.save(updateComment(comment));
   }
-
+  fun createPostForce(comment: Comment): Comment {
+    return commentRepository.save(comment);
+  }
   fun createCommentFromDto(CommentDTO: CommentDTO): Comment {
     return createCommentFromModel(prepareDtoFrom(CommentDTO, Comment::class.java) as Comment? as Comment)
   }
@@ -43,4 +48,16 @@ class CommentComponent : DataComponent<CommentDTO, Comment>() {
   fun findLastComment(): Comment? {
    return commentRepository.findTopByOrderByIdDesc();
   }
+
+  fun getCommentFromId(id: Long): Comment? {
+    return commentRepository.getOneById(id);
+  }
+
+  fun getPostFromStartAndLimit(start: Comment, end: Int): Page<Comment> {
+    val pageable: Pageable = OffsetBasedPageRequest(start.id!!.toInt(), end)
+    return commentRepository.findAll(pageable)
+
+  }
+
+
 }
