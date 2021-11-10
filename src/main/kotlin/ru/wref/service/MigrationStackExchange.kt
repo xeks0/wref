@@ -10,6 +10,7 @@ import ru.wref.dto.CommentsList
 import ru.wref.dto.UsersList
 import ru.wref.dto.PostList
 import ru.wref.dto.TagList
+import ru.wref.model.Post
 import javax.inject.Inject
 import javax.xml.bind.JAXBContext
 
@@ -30,16 +31,20 @@ class MigrationStackExchange {
   lateinit var commentComponent : CommentComponent;
 
   @Transactional
-  fun migrationMovie(path:String): Boolean? {
-    return executeUser(getUsers(path)) == true && executeTag(getTags(path)) == true && executePost(getPosts(path)) == true && executeComment(getComments(path));
+  fun migrationMovie(path:String,startIds: Int,type: Post.Type): Boolean? {
+    return executeUser(getUsers(path), startIds) == true && executeTag(getTags(path), startIds) == true && executePost(
+      getPosts(path),
+      startIds,
+      type
+    ) == true && executeComment(getComments(path), startIds);
   }
 
   fun getComments(path: String):CommentsList{
     return getResources(JAXBContext.newInstance(CommentsList::class.java),"$path/Comments.xml") as CommentsList
   }
 
-  fun executeComment(comments: CommentsList): Boolean {
-    return commentComponent.createCommentFromList(comments).isNotEmpty();
+  fun executeComment(comments: CommentsList, startIds: Int): Boolean {
+    return commentComponent.createCommentFromList(comments,startIds).isNotEmpty();
 
   }
 
@@ -47,24 +52,24 @@ class MigrationStackExchange {
    return getResources(JAXBContext.newInstance(UsersList::class.java),"$path/Users.xml") as UsersList
   }
 
-  fun executeUser(users: UsersList):Boolean?{
-    return userComponent.createUserFromList(users).isNotEmpty();
+  fun executeUser(users: UsersList, startIds: Int):Boolean?{
+    return userComponent.createUserFromList(users,startIds).isNotEmpty();
   }
 
   fun getTags(path: String):TagList{
     return  getResources(JAXBContext.newInstance(TagList::class.java), "$path/Tags.xml") as TagList
   }
 
-  fun executeTag(tagList: TagList):Boolean?{
-    return tagComponent.createTagsFromList(tagList).isNotEmpty();
+  fun executeTag(tagList: TagList, startIds: Int):Boolean?{
+    return tagComponent.createTagsFromList(tagList,startIds).isNotEmpty();
   }
 
   fun getPosts(path: String):PostList{
     return getResources(JAXBContext.newInstance(PostList::class.java),"$path/Posts.xml") as PostList
   }
 
-  fun executePost(postList: PostList ):Boolean?{
-    return postComponent.createPostsFromList(postList).isNotEmpty();
+  fun executePost(postList: PostList, startIds: Int, type: Post.Type):Boolean?{
+    return postComponent.createPostsFromList(postList,startIds,type).isNotEmpty();
   }
 
   private fun getResources(jaxbContext : JAXBContext, file: String): Any? {

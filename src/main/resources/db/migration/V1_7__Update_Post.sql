@@ -1,0 +1,2 @@
+ALTER TABLE posts
+ADD COLUMN type INT(11) NOT NULL DEFAULT 0 AFTER is_translate;

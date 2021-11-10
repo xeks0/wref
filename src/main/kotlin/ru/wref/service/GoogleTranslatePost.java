@@ -4,7 +4,6 @@ import com.codeborne.selenide.Configuration;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
 import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 import lombok.SneakyThrows;
-import org.openqa.selenium.chrome.ChromeOptions;
 import ru.wref.model.Post;
 
 import java.io.IOException;
@@ -18,51 +17,64 @@ public class GoogleTranslatePost implements Runnable {
   String langFrom;
   String langTo;
   List<Post> postList;
+  Post.Type type;
 
-  public GoogleTranslatePost(String langFrom, String langTo, List<Post> postList) {
+  public GoogleTranslatePost(String langFrom, String langTo, List<Post> postList, Post.Type type) {
     this.langFrom = langFrom;
     this.langTo = langTo;
     this.postList = postList;
+    this.type = type;
   }
 
   public void translate() throws IOException, InterruptedException {
     ChromeDriverManager.getInstance(DriverManagerType.CHROME).browserVersion("94.0.4606.61").setup();
     Configuration.startMaximized = true;
 
-    open("https://translate.google.com/?hl=ru#view=home&op=translate&sl=en&tl=ru");
-    if($x("//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc']").exists()) {
-      $x("//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc']").click();
-    }
 
     Thread.sleep(1000);
     for (int i = 0; i < postList.size(); i++) {
-      open("https://translate.google.com/?hl=ru#view=home&op=translate&sl=en&tl=ru");
+
       Thread.sleep(200);
       Post post = postList.get(i);
-      if (post.getTitle() != null) {
-        try {
-          $x("//textarea[@class='er8xn']").clear();
-          $x("//textarea[@class='er8xn']").sendKeys(post.getTitle());
-          Thread.sleep(1000);
-          post.setTitleRu($x("//div[@class='J0lOec']").getText());
+      open("http://localhost:3000/"+type.name().toLowerCase()+"/questions/"+post.getId());
+      Thread.sleep(300);
+      int countScrolle = 5;
 
-          post.setTranslate(2);
-        } catch (Exception er) {
-          post.setTranslate(-1);
-        }
+      XdotScript testScript = new XdotScript();
+      testScript.runScript("/bin/sh /home/xeks/xdotool_script");
 
+      if($x("//div[@id='clientHeight']").exists()) {
+        countScrolle = Integer.parseInt($x("//div[@id='clientHeight']").getText());
       }
-      open("https://translate.google.com/?hl=ru#view=home&op=translate&sl=en&tl=ru");
-      Thread.sleep(200);
-      if (post.getBody() != null) {
-        try {
-          $x("//textarea[@class='er8xn']").clear();
-          $x("//textarea[@class='er8xn']").sendKeys(post.getBody());
-          Thread.sleep(1000);
-          post.setBodyRu($x("//div[@class='J0lOec']").getText());
-          post.setTranslate(1);
-        } catch (Exception er) {
-          post.setTranslate(-1);
+
+      if(countScrolle>1080){
+        countScrolle = countScrolle/100;
+        for (int j = 0; j < countScrolle; j++) {
+          testScript = new XdotScript();
+          testScript.runScript("/bin/sh /home/xeks/xdotool_script_scroll_down");
+        }
+        for (int j = 0; j < countScrolle; j++) {
+          testScript = new XdotScript();
+          testScript.runScript("/bin/sh /home/xeks/xdotool_script_scroll_up");
+        }
+        testScript = new XdotScript();
+        testScript.runScript("/bin/sh /home/xeks/xdotool_script_scroll_up");
+      }
+
+      post.setTranslate(1);
+      Thread.sleep(2000);
+      int w= 0;
+      while (true) {
+        if ($x("//button[@id='save_translate']").exists() && $x("//button[@id='save_translate']").getText().equalsIgnoreCase("Сохранить")) {
+          $x("//button[@id='save_translate']").click();
+          break;
+        }
+         testScript = new XdotScript();
+        testScript.runScript("/bin/sh /home/xeks/xdotool_script");
+        Thread.sleep(2000);
+        w++;
+        if (w > 10) {
+          break;
         }
       }
     }

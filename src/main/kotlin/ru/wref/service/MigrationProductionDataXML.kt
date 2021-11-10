@@ -33,31 +33,36 @@ open class MigrationProductionDataXML {
   lateinit var commentComponent: CommentComponent;
 
   @Transactional
-  fun exportData(path: String, maxInTry: Int) {
-    if (exportUser(path, maxInTry) != -1) {
+  fun exportData(path: String, maxInTry: Int, startIds: Int, type: Post.Type) {
+    if (exportUser(path, maxInTry,startIds) != -1) {
       return;
     }
-    if (exportTag(path, maxInTry) != -1) {
+    if (exportTag(path, maxInTry,startIds) != -1) {
       return;
     }
-    if (exportPost(path, maxInTry) != -1) {
+    if (exportPost(path, maxInTry,startIds,type) != -1) {
       return;
     }
-    if (exportComment(path, maxInTry) != -1) {
+    if (exportComment(path, maxInTry,startIds) != -1) {
       return;
     }
   }
 
-  private fun exportComment(path: String, maxInTry: Int): Int {
+  private fun exportComment(path: String, maxInTry: Int, startIds: Int): Int {
     val usersList: CommentsList = migrationStackExchange.getComments(path)
     val lastUser: Comment? = commentComponent.findLastComment();
 
     if (lastUser == null) {
       val userDTOs: List<CommentDTO> = siblistComment(usersList, 0, maxInTry)
-      createComments(usersList, userDTOs)
+      createComments(usersList, userDTOs,startIds)
       return 1
     }
-    val indexOfLastUser: Int = getLatIndexComment(usersList, lastUser);
+    if (lastUser.id!! <startIds) {
+      val userDTOs: List<CommentDTO> = siblistComment(usersList, 0, maxInTry)
+      createComments(usersList, userDTOs,startIds)
+      return 1
+    }
+    val indexOfLastUser: Int = getLatIndexComment(usersList, lastUser,startIds);
     if (indexOfLastUser == -1) {
       return -1;
     }
@@ -65,20 +70,25 @@ open class MigrationProductionDataXML {
       return -1;
     }
     val userDTOs: List<CommentDTO> = siblistComment(usersList, indexOfLastUser + 1, maxInTry + indexOfLastUser)
-    createComments(CommentsList(), userDTOs)
+    createComments(CommentsList(), userDTOs, startIds)
     return 1;
   }
 
-  private fun exportPost(path: String, maxInTry: Int): Int {
+  private fun exportPost(path: String, maxInTry: Int, startIds: Int, type: Post.Type): Int {
     val usersList: PostList = migrationStackExchange.getPosts(path)
-    val lastUser: Post? = postComponent.findLastPost();
+    val lastUser: Post? = postComponent.findLastPost(type);
 
     if (lastUser == null) {
       val userDTOs: List<PostDTO> = siblistPost(usersList, 0, maxInTry)
-      createPosts(usersList, userDTOs)
+      createPosts(usersList, userDTOs,startIds,type)
       return 1
     }
-    val indexOfLastUser: Int = getLatIndexPost(usersList, lastUser);
+    if (lastUser.id!! < startIds) {
+      val userDTOs: List<PostDTO> = siblistPost(usersList, 0, maxInTry)
+      createPosts(usersList, userDTOs,startIds,type)
+      return 1
+    }
+    val indexOfLastUser: Int = getLatIndexPost(usersList, lastUser,startIds);
     if (indexOfLastUser == -1) {
       return -1;
     }
@@ -86,20 +96,25 @@ open class MigrationProductionDataXML {
       return -1;
     }
     val userDTOs: List<PostDTO> = siblistPost(usersList, indexOfLastUser + 1, maxInTry + indexOfLastUser)
-    createPosts(PostList(), userDTOs)
+    createPosts(PostList(), userDTOs, startIds,type)
     return 1;
   }
 
 
-  private fun exportTag(path: String, maxInTry: Int): Int {
+  private fun exportTag(path: String, maxInTry: Int, startIds: Int): Int {
     val usersList: TagList = migrationStackExchange.getTags(path)
     val lastUser: Tag? = tagComponent.findLastTag();
-
     if (lastUser == null) {
       val userDTOs: List<TagDTO> = siblistTag(usersList, 0, maxInTry)
-      createTags(usersList, userDTOs)
+      createTags(usersList, userDTOs,startIds)
       return 1
     }
+    if (lastUser.id!! < startIds) {
+      val userDTOs: List<TagDTO> = siblistTag(usersList, 0, maxInTry)
+      createTags(usersList, userDTOs,startIds)
+      return 1
+    }
+
     val indexOfLastUser: Int = getLatIndexTag(usersList, lastUser);
     if (indexOfLastUser == -1) {
       return -1;
@@ -108,20 +123,25 @@ open class MigrationProductionDataXML {
       return -1;
     }
     val userDTOs: List<TagDTO> = siblistTag(usersList, indexOfLastUser + 1, maxInTry + indexOfLastUser)
-    createTags(TagList(), userDTOs)
+    createTags(TagList(), userDTOs, startIds)
     return 1;
   }
 
-  private fun exportUser(path: String, maxInTry: Int): Int {
+  private fun exportUser(path: String, maxInTry: Int, startIds: Int): Int {
     val usersList: UsersList = migrationStackExchange.getUsers(path)
     val lastUser: User? = userComponent.findLastUser();
 
     if (lastUser == null) {
       val userDTOs: List<UserDTO> = siblistUser(usersList, 0, maxInTry)
-      createUsers(usersList, userDTOs)
+      createUsers(usersList, userDTOs, startIds)
       return 1
     }
-    val indexOfLastUser: Int = getLatIndexUser(usersList, lastUser);
+    if(lastUser.id!! < startIds){
+      val userDTOs: List<UserDTO> = siblistUser(usersList, 0, maxInTry)
+      createUsers(usersList, userDTOs, startIds)
+      return 1
+    }
+    val indexOfLastUser: Int = getLatIndexUser(usersList, lastUser,startIds);
     if (indexOfLastUser == -1) {
       return -1;
     }
@@ -129,59 +149,59 @@ open class MigrationProductionDataXML {
       return -1;
     }
     val userDTOs: List<UserDTO> = siblistUser(usersList, indexOfLastUser + 1, maxInTry + indexOfLastUser)
-    createUsers(UsersList(), userDTOs)
+    createUsers(UsersList(), userDTOs,startIds)
     return 1;
   }
 
-  private fun createComments(usersList: CommentsList, userDTOs: List<CommentDTO>) {
+  private fun createComments(usersList: CommentsList, userDTOs: List<CommentDTO>, startIds: Int) {
     var usersList1 = usersList
     usersList1 = CommentsList();
     usersList1.commentDTOList = userDTOs;
-    migrationStackExchange.executeComment(usersList1)
+    migrationStackExchange.executeComment(usersList1, startIds)
   }
 
-  private fun createPosts(usersList: PostList, userDTOs: List<PostDTO>) {
+  private fun createPosts(usersList: PostList, userDTOs: List<PostDTO>, startIds: Int, type: Post.Type) {
     var usersList1 = usersList
     usersList1 = PostList();
     usersList1.postDTOList = userDTOs;
-    migrationStackExchange.executePost(usersList1)
+    migrationStackExchange.executePost(usersList1, startIds,type)
   }
 
-  private fun createUsers(usersList: UsersList, userDTOs: List<UserDTO>) {
+  private fun createUsers(usersList: UsersList, userDTOs: List<UserDTO>, startIds: Int) {
     var usersList1 = usersList
     usersList1 = UsersList();
     usersList1.userDTOList = userDTOs;
-    migrationStackExchange.executeUser(usersList1)
+    migrationStackExchange.executeUser(usersList1,startIds)
   }
 
-  private fun createTags(usersList: TagList, userDTOs: List<TagDTO>) {
+  private fun createTags(usersList: TagList, userDTOs: List<TagDTO>, startIds: Int) {
     var usersList1 = usersList
     usersList1 = TagList();
     usersList1.tagDTOList = userDTOs;
-    migrationStackExchange.executeTag(usersList1)
+    migrationStackExchange.executeTag(usersList1, startIds)
   }
 
-  private fun getLatIndexComment(usersList: CommentsList, lastUser: Comment): Int {
+  private fun getLatIndexComment(usersList: CommentsList, lastUser: Comment, startIds: Int): Int {
     for (userDTO: CommentDTO in usersList.commentDTOList) {
-      if (userDTO.id?.equals(lastUser.id.toString()) == true) {
+      if ((userDTO.id?.toLong() ?: 0) + startIds.toLong() == lastUser.id) {
         return usersList.commentDTOList.indexOf(userDTO)
       }
     }
     return -1;
   }
 
-  private fun getLatIndexPost(usersList: PostList, lastUser: Post): Int {
+  private fun getLatIndexPost(usersList: PostList, lastUser: Post,startIds: Int): Int {
     for (userDTO: PostDTO in usersList.postDTOList) {
-      if (userDTO.id?.toLong() ?: 0 == lastUser.id) {
+      if ((userDTO.id?.toLong() ?: 0) + startIds.toLong() == lastUser.id) {
         return usersList.postDTOList.indexOf(userDTO)
       }
     }
     return -1;
   }
 
-  private fun getLatIndexUser(usersList: UsersList, lastUser: User): Int {
+  private fun getLatIndexUser(usersList: UsersList, lastUser: User, startIds: Int): Int {
     for (userDTO: UserDTO in usersList.userDTOList) {
-      if (userDTO.id?.toLong() ?: 0 == lastUser.id) {
+      if ((userDTO.id?.toLong() ?: 0) + startIds.toLong() == lastUser.id) {
         return usersList.userDTOList.indexOf(userDTO)
       }
     }
@@ -235,63 +255,85 @@ open class MigrationProductionDataXML {
   }
 
 
-  fun translate(i: Int) {
+  fun translate(i: Int,type:Post.Type) {
     try {
-      val postTranslate =  getLastPostTranslate()
+      val postTranslate =  getLastPostTranslate(type)
       if(postTranslate == -1L){
-        translatePost(0,i)
+        translatePost(0,i,type)
+        return
       }
       if(postTranslate >0){
-        translatePost(postTranslate ,i)
+        translatePost(postTranslate ,i,type)
+        return
       }
     }catch (e:Exception){
       e.printStackTrace()
     }
-    try {
-      val сommentTranslate =  getLastCommentsTranslate()
-      if(сommentTranslate == -1L){
-        translateComment(0,i)
-      }
-      if(сommentTranslate >0){
-        translateComment(сommentTranslate ,i)
-      }
-    }catch (e:Exception){
-      e.printStackTrace()
-    }
-    try {
-      val userTranslate =  getLastUserTranslate()
-      if(userTranslate == -1L){
-        translateUser(0,i)
-      }
-      if(userTranslate >0){
-        translateUser(userTranslate ,i)
-      }
-    }catch (e:Exception){
-      e.printStackTrace()
-    }
+//    try {
+//      val сommentTranslate =  getLastCommentsTranslate()
+//      if(сommentTranslate == -1L){
+//        translateComment(0,i)
+//        return
+//      }
+//      if(сommentTranslate >0){
+//        translateComment(сommentTranslate ,i)
+//        return
+//      }
+//    }catch (e:Exception){
+//      e.printStackTrace()
+//    }
+//    try {
+//      val userTranslate =  getLastUserTranslate()
+//      if(userTranslate == -1L){
+//        translateUser(0,i)
+//        return
+//      }
+//      if(userTranslate >0){
+//        translateUser(userTranslate ,i)
+//        return
+//      }
+//    }catch (e:Exception){
+//      e.printStackTrace()
+//    }
   }
 
-  private fun translatePost(start: Long, end: Int) {
-    var postStart: Post? = postComponent.getPostFromId(start)
+  private fun translatePost(start: Long, end: Int,type: Post.Type) {
+    var postStart: Post? = postComponent.getPostFromId(start, type)
     if(postStart != null){
-      var posts: Page<Post> = postComponent.getPostFeromStartAndLimit(postStart,end)
-
+      var posts: MutableList<Post> = mutableListOf()
+        var sis: Long = start;
+      var inter:Int = 0;
+      while (posts.size<100){
+        var post: Post? = postComponent.getPostFromId(sis++, type);
+        if(post !=null && post.postTypeId == 1){
+          posts.add(post);
+        }
+        if(post == null){
+          inter ++
+        }
+        if(inter >130){
+          break
+        }
+      }
       var translate: MutableList<Post> = mutableListOf();
-      if(postStart.isTranslate == 0){
+      if(postStart.isTranslate == 0 || postStart.isTranslate == -1){
         translate.add(postStart)
       }
       for (post:Post in posts){
-        if(postStart.isTranslate == 0){
+        if(post.isTranslate == 0 || post.isTranslate == -1){
           translate.add(post)
         }
       }
-    var t1 = Thread(GoogleTranslatePost("en", "ru", translate))
+      if(translate.size == 0){
+        return
+      }
+    var t1 = Thread(GoogleTranslatePost("en", "ru", translate,type))
     t1.start();
     t1.join()
 
-      for (post:Post in translate){
-        postComponent.createPostForce(post);
-      }
+//      for (post:Post in translate){
+//        postComponent.createPostForce(post);
+//      }
     }
 
   }
@@ -301,20 +343,23 @@ open class MigrationProductionDataXML {
       var posts: Page<User> = userComponent.getPostFromStartAndLimit(userStart,end)
 
       var translate: MutableList<User> = mutableListOf();
-      if(userStart.isTranslate == 0){
+      if(userStart.isTranslate == 0 || userStart.isTranslate == -1){
         translate.add(userStart)
       }
       for (user:User in posts){
-        if(userStart.isTranslate == 0){
+        if(user.isTranslate == 0 || user.isTranslate == -1){
           translate.add(user)
         }
+      }
+      if(translate.size == 0){
+        return
       }
       var t1 = Thread(GoogleTranslateUser("en", "ru", translate))
       t1.start();
       t1.join()
-      for (post:User in translate){
-        userComponent.createUserForce(post);
-      }
+//      for (post:User in translate){
+//        userComponent.createUserForce(post);
+//      }
     }
 
   }
@@ -323,29 +368,32 @@ open class MigrationProductionDataXML {
     if(commentStart != null){
       var posts: Page<Comment> = commentComponent.getPostFromStartAndLimit(commentStart,end)
 
-      var translate: MutableList<Comment> = mutableListOf();
-      if(commentStart.isTranslate == 0){
+      var translate: MutableSet<Comment> = mutableSetOf();
+      if(commentStart.isTranslate == 0 || commentStart.isTranslate == -1){
         translate.add(commentStart)
       }
       for (comment:Comment in posts){
-        if(commentStart.isTranslate == 0){
+        if(comment.isTranslate == 0 || comment.isTranslate == -1){
           translate.add(comment)
         }
+      }
+      if(translate.size == 0){
+        return
       }
       var t1 = Thread(GoogleTranslateComment("en", "ru", translate))
       t1.start();
       t1.join()
-      for (post:Comment in translate){
-        commentComponent.createPostForce(post);
-      }
+//      for (post:Comment in translate){
+//        commentComponent.createPostForce(post);
+//      }
     }
 
   }
 
-  private fun getLastPostTranslate(): Long {
-    var post: Post? = postComponent.getLastPostTranslate()
+  private fun getLastPostTranslate(type: Post.Type): Long {
+    var post: Post? = postComponent.getLastPostTranslate(type)
     if (post != null) {
-      val post1: Post? = postComponent.findLastPost();
+      val post1: Post? = postComponent.findLastPost(type);
       if (post1 != null) {
         if (post1.id == post.id) {
           return 0;
@@ -382,6 +430,53 @@ open class MigrationProductionDataXML {
       return comment.id!!;
     }
     return -1;
+
+  }
+
+  fun fixTranslate() {
+     var s = 0;
+    for (i in 1..10000){
+      if(s>i){
+        continue
+      }
+      var postStart: Post? = postComponent.getPostFromId(i.toLong(), "movies")
+      if(postStart !=null){
+        var posts: Page<Post> = postComponent.getPostFeromStartAndLimit(postStart,100)
+        for (post:Post in posts){
+          if(post.body!=null && post.body!!.isNotEmpty() && post.bodyRu == null){
+            post.isTranslate = 0;
+            postComponent.createPostForce(post)
+          }
+        }
+        s = i+100;
+      }
+
+    }
+
+  }
+
+  fun changeDataTranslate() {
+
+    for (i:Int in 0..200000){
+      var post: Post? = postComponent.getPostFromId(i.toLong(),Post.Type.MOVIE)
+      if(post!=null){
+        post.bodyRu  = post.bodyRu?.replace("<font style=\"vertical-align: inherit;\">","")
+        post.bodyRu  = post.bodyRu?.replace("</font>","")
+        post.titleRu  = post.titleRu?.replace("<font style=\"vertical-align: inherit;\">","")
+        post.titleRu  = post.titleRu?.replace("</font>","")
+        postComponent.createPostForce(post);
+      }
+    }
+
+    for (i:Int in 0..200000){
+      var post: Comment? = commentComponent.getCommentFromId(i.toLong())
+      if(post!=null){
+        post.textRu  = post.textRu?.replace("<font style=\"vertical-align: inherit;\">","")
+        post.textRu  = post.textRu?.replace("</font>","")
+        post.textRu = post.textRu?.replace("] (htt","](htt")
+        commentComponent.createPostForce(post);
+      }
+    }
 
   }
 

@@ -9,6 +9,10 @@ import javax.persistence.*
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Post : BaseModel<Long>() {
 
+  enum class Type{
+    MOVIE,
+    ARDUINO,
+  }
   @Id
   @Column(name = "post_id")
   override var id: Long? = null;
@@ -46,14 +50,16 @@ class Post : BaseModel<Long>() {
 
   var contentLicense: String? = null;
 
+  @Column(columnDefinition = "TEXT")
   var title: String? = null;
 
+  @Column(columnDefinition = "TEXT")
   var titleRu: String? = null;
 
-  @Column(columnDefinition = "TEXT")
+  @Column(columnDefinition = "LONGTEXT")
   var body: String? = null;
 
-  @Column(columnDefinition = "TEXT")
+  @Column(columnDefinition = "LONGTEXT")
   var bodyRu: String? = null;
 
   var slug: String? = null;
@@ -71,6 +77,9 @@ class Post : BaseModel<Long>() {
   var lastEditDate: Date? = null;
 
   var lastActivityDate: Date? = null;
+
+  @Enumerated(EnumType.ORDINAL)
+  var type: Type = Type.MOVIE;
 
   @ManyToOne
   @JoinColumn(name = "last_editor_user_id", nullable = true)

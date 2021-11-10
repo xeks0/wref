@@ -7,12 +7,13 @@ import ru.wref.model.PostProxy
 import ru.wref.repository.PostRepository
 import java.io.IOException
 
-class PostSerialisation(val postRepository: PostRepository) : JsonDeserializer<PostProxy>() {
+class PostSerialisation(val postRepository: PostRepository, var startIds: Int) : JsonDeserializer<PostProxy>() {
 
   @Throws(IOException::class)
   override fun deserialize(parser: JsonParser, context: DeserializationContext): PostProxy? {
     val post = PostProxy()
-    post.post = postRepository.getOneById(parser.valueAsLong)
+    val id:Long  = parser.valueAsLong.plus(startIds);
+    post.post = postRepository.getOneById(id)
     return post
   }
 }

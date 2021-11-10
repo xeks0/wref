@@ -1,6 +1,5 @@
 package ru.wref.components
 
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
@@ -13,24 +12,25 @@ import ru.wref.model.User
 @Component
 class UserComponent : DataComponent<UserDTO,User>(){
 
-  fun createAccountFrom(user: User): User {
+  fun createAccountFrom(user: User,startIds: Int): User {
+      user.id = user.id?.plus(startIds);
       return userRepository.save(user);
   }
   fun createUserForce(user: User): User {
     return userRepository.save(user);
   }
-  fun createAccountFrom(userDTO: UserDTO): User {
-    return createAccountFrom(prepareDtoFrom(userDTO,User::class.java) as User)
+  fun createAccountFrom(userDTO: UserDTO,startIds: Int): User {
+    return createAccountFrom(prepareDtoFrom(userDTO,User::class.java) as User,startIds)
   }
 
   /**
    * Create accounts from list of received data from xml
    */
   @Transactional
-  fun createUserFromList(account: UsersList): List<User> {
+  fun createUserFromList(account: UsersList, startIds: Int): List<User> {
     val users: MutableList<User> = mutableListOf()
     for (user: UserDTO in account.userDTOList!!) {
-      users.add(createAccountFrom(user));
+      users.add(createAccountFrom(user,startIds));
     }
     return users;
   }

@@ -8,7 +8,6 @@ import ru.wref.model.Tag
 import ru.wref.model.TagProxy
 import ru.wref.repository.TagRepository
 import java.io.IOException
-import java.util.*
 
 @Component
 class TagSerialisation(var tagRepository: TagRepository) : JsonDeserializer<TagProxy>() {

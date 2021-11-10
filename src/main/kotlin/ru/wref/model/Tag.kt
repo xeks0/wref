@@ -9,7 +9,6 @@ import javax.persistence.*
 class Tag: BaseModel<Long>() {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "tag_id")
   override var id: Long? = null;
 
